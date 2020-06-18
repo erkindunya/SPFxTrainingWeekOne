@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "greeting-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/greeting/GreetingWebPart.js",
+          "manifest": "./src/webparts/greeting/GreetingWebPart.manifest.json"
+        }
+      ]
+    },
+    "customers-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/customers/CustomersWebPart.js",
+          "manifest": "./src/webparts/customers/CustomersWebPart.manifest.json"
+        }
+      ]
+    },
+    "products-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/products/ProductsWebPart.js",
+          "manifest": "./src/webparts/products/ProductsWebPart.manifest.json"
+        }
+      ]
+    },
+    "products-table-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/productsTable/ProductsTableWebPart.js",
+          "manifest": "./src/webparts/productsTable/ProductsTableWebPart.manifest.json"
+        }
+      ]
+    },
+    "jq-demo-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/jqDemo/JqDemoWebPart.js",
+          "manifest": "./src/webparts/jqDemo/JqDemoWebPart.manifest.json"
+        }
+      ]
+    },
+    "data-table-demo-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/dataTableDemo/DataTableDemoWebPart.js",
+          "manifest": "./src/webparts/dataTableDemo/DataTableDemoWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {
+    "jquery": "https://code.jquery.com/jquery-1.12.4.min.js",
+    "datatables.net": "https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"
+  },
+  "localizedResources": {
+    "GreetingWebPartStrings": "lib/webparts/greeting/loc/{locale}.js",
+    "CustomersWebPartStrings": "lib/webparts/customers/loc/{locale}.js",
+    "ProductsWebPartStrings": "lib/webparts/products/loc/{locale}.js",
+    "ProductsTableWebPartStrings": "lib/webparts/productsTable/loc/{locale}.js",
+    "JqDemoWebPartStrings": "lib/webparts/jqDemo/loc/{locale}.js",
+    "DataTableDemoWebPartStrings": "lib/webparts/dataTableDemo/loc/{locale}.js"
+  }
+}
