@@ -21,7 +21,11 @@
     "description": { "default": "PropertyPaneDemo description" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "PropertyPaneDemo"
+      "productid": 1112,
+      "productname": "dasd",
+      "productdesc":"asdsadsad",
+      "category": "Adhesives",
+      "discontinued":false
     }
   }]
 }
