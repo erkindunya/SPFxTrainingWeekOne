@@ -49,6 +49,14 @@
           "manifest": "./src/webparts/dataTableDemo/DataTableDemoWebPart.manifest.json"
         }
       ]
+    },
+    "property-pane-demo-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/propertyPaneDemo/PropertyPaneDemoWebPart.js",
+          "manifest": "./src/webparts/propertyPaneDemo/PropertyPaneDemoWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {
@@ -61,6 +69,7 @@
     "ProductsWebPartStrings": "lib/webparts/products/loc/{locale}.js",
     "ProductsTableWebPartStrings": "lib/webparts/productsTable/loc/{locale}.js",
     "JqDemoWebPartStrings": "lib/webparts/jqDemo/loc/{locale}.js",
-    "DataTableDemoWebPartStrings": "lib/webparts/dataTableDemo/loc/{locale}.js"
+    "DataTableDemoWebPartStrings": "lib/webparts/dataTableDemo/loc/{locale}.js",
+    "PropertyPaneDemoWebPartStrings": "lib/webparts/propertyPaneDemo/loc/{locale}.js"
   }
 }

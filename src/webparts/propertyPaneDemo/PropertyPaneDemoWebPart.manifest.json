@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "af49c957-e6b8-4c5e-ac0f-e55baba67e29",
-  "alias": "GreetingWebPart",
+  "id": "94ef7a50-18be-40f5-98e2-92b0f651a264",
+  "alias": "PropertyPaneDemoWebPart",
   "componentType": "WebPart",
 
   // The "*" signifies that the version should be taken from the package.json
@@ -17,14 +17,11 @@
   "preconfiguredEntries": [{
     "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Other
     "group": { "default": "Other" },
-    "title": { "default": "Greeting" },
-    "description": { "default": "Display greeting" },
+    "title": { "default": "PropertyPaneDemo" },
+    "description": { "default": "PropertyPaneDemo description" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "message": "Hello World!",
-      "name" : "vijay",
-      "address" : "Chennai"
-
+      "description": "PropertyPaneDemo"
     }
   }]
 }

@@ -11,6 +11,8 @@ import * as strings from 'GreetingWebPartStrings';
 
 export interface IGreetingWebPartProps {
 message: string;
+name: string;
+address: string;
 }
 
 export default class GreetingWebPart extends BaseClientSideWebPart <IGreetingWebPartProps> {
@@ -24,6 +26,8 @@ export default class GreetingWebPart extends BaseClientSideWebPart <IGreetingWeb
                     <span class="${ styles.title }">GREETING</span>
                     <p class="${ styles.subTitle }">This is not my first SPx Web Parts.</p>
                     <p class="${ styles.description }">${escape(this.properties.message)}</p>
+                    <p class="${ styles.description }">${ this.properties.name }</p>
+                    <p class="${ styles.description }">${ this.properties.address }</p>
                 </div>
             </div>
         </div>
@@ -39,15 +43,26 @@ export default class GreetingWebPart extends BaseClientSideWebPart <IGreetingWeb
     pages: [
     {
     header: {
-    description: strings.PropertyPaneDescription
+    description: "Greeting Info"
     },
     groups: [
     {
-    groupName: strings.BasicGroupName,
+    groupName: "Basic Info",
     groupFields: [
     PropertyPaneTextField('message', {
-    label: strings.DescriptionFieldLabel
-    })
+    label: "Message"
+    }),
+    PropertyPaneTextField('name',{
+        label: 'Name',
+        resizable: true
+      }),
+      PropertyPaneTextField('address',{
+        label: 'Address',
+        resizable: true,
+        multiline: true,
+        rows: 4
+      })
+
     ]
     }
     ]
