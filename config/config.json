@@ -57,6 +57,14 @@
           "manifest": "./src/webparts/propertyPaneDemo/PropertyPaneDemoWebPart.manifest.json"
         }
       ]
+    },
+    "courses-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/courses/CoursesWebPart.js",
+          "manifest": "./src/webparts/courses/CoursesWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {
@@ -70,6 +78,7 @@
     "ProductsTableWebPartStrings": "lib/webparts/productsTable/loc/{locale}.js",
     "JqDemoWebPartStrings": "lib/webparts/jqDemo/loc/{locale}.js",
     "DataTableDemoWebPartStrings": "lib/webparts/dataTableDemo/loc/{locale}.js",
-    "PropertyPaneDemoWebPartStrings": "lib/webparts/propertyPaneDemo/loc/{locale}.js"
+    "PropertyPaneDemoWebPartStrings": "lib/webparts/propertyPaneDemo/loc/{locale}.js",
+    "CoursesWebPartStrings": "lib/webparts/courses/loc/{locale}.js"
   }
 }

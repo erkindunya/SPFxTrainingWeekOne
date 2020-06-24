@@ -1,3 +1,3 @@
-export interface IProductsTableWebPartProps {
-  description: string;
-}
+// export interface IProductsTableWebPartProps {
+//   description: string;
+// }
