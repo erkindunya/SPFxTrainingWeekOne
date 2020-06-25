@@ -1,10 +1,10 @@
 declare interface IProductsTableWebPartStrings {
-  PropertyPaneDescription: string;
-  BasicGroupName: string;
-  DescriptionFieldLabel: string;
+    PropertyPaneDescription: string;
+    BasicGroupName: string;
+    DescriptionFieldLabel: string;
 }
 
 declare module 'ProductsTableWebPartStrings' {
-  const strings: IProductsTableWebPartStrings;
-  export = strings;
+    const strings: IProductsTableWebPartStrings;
+    export = strings;
 }

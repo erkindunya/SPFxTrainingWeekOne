@@ -1,10 +1,10 @@
 declare interface IPropertyPaneDemoWebPartStrings {
-  PropertyPaneDescription: string;
-  BasicGroupName: string;
-  DescriptionFieldLabel: string;
+    PropertyPaneDescription: string;
+    BasicGroupName: string;
+    DescriptionFieldLabel: string;
 }
 
 declare module 'PropertyPaneDemoWebPartStrings' {
-  const strings: IPropertyPaneDemoWebPartStrings;
-  export = strings;
+    const strings: IPropertyPaneDemoWebPartStrings;
+    export = strings;
 }

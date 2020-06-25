@@ -1,13 +1,13 @@
-import { Version } from "@microsoft/sp-core-library";
+import { Version } from '@microsoft/sp-core-library';
 import {
     IPropertyPaneConfiguration,
     PropertyPaneTextField,
-} from "@microsoft/sp-property-pane";
-import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
-import { escape } from "@microsoft/sp-lodash-subset";
+} from '@microsoft/sp-property-pane';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { escape } from '@microsoft/sp-lodash-subset';
 
-import styles from "./GreetingWebPart.module.scss";
-import * as strings from "GreetingWebPartStrings";
+import styles from './GreetingWebPart.module.scss';
+import * as strings from 'GreetingWebPartStrings';
 
 export interface IGreetingWebPartProps {
     message: string;
@@ -42,7 +42,7 @@ export default class GreetingWebPart extends BaseClientSideWebPart<
     }
 
     protected get dataVersion(): Version {
-        return Version.parse("1.0");
+        return Version.parse('1.0');
     }
 
     protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -50,21 +50,21 @@ export default class GreetingWebPart extends BaseClientSideWebPart<
             pages: [
                 {
                     header: {
-                        description: "Greeting Info",
+                        description: 'Greeting Info',
                     },
                     groups: [
                         {
-                            groupName: "Basic Info",
+                            groupName: 'Basic Info',
                             groupFields: [
-                                PropertyPaneTextField("message", {
-                                    label: "Message",
+                                PropertyPaneTextField('message', {
+                                    label: 'Message',
                                 }),
-                                PropertyPaneTextField("name", {
-                                    label: "Name",
+                                PropertyPaneTextField('name', {
+                                    label: 'Name',
                                     resizable: true,
                                 }),
-                                PropertyPaneTextField("address", {
-                                    label: "Address",
+                                PropertyPaneTextField('address', {
+                                    label: 'Address',
                                     resizable: true,
                                     multiline: true,
                                     rows: 4,

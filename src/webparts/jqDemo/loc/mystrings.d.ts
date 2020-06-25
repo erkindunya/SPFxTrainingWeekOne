@@ -1,10 +1,10 @@
 declare interface IJqDemoWebPartStrings {
-  PropertyPaneDescription: string;
-  BasicGroupName: string;
-  DescriptionFieldLabel: string;
+    PropertyPaneDescription: string;
+    BasicGroupName: string;
+    DescriptionFieldLabel: string;
 }
 
 declare module 'JqDemoWebPartStrings' {
-  const strings: IJqDemoWebPartStrings;
-  export = strings;
+    const strings: IJqDemoWebPartStrings;
+    export = strings;
 }

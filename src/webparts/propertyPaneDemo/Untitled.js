@@ -1,4 +1,4 @@
-const name = "James";
+const name = 'James';
 
 const person = { first: name };
 
@@ -8,4 +8,4 @@ const sayHelloLinting = (fname) => {
     console.log(`Hello linting, ${fName}`);
 };
 
-sayHelloLinting("James");
+sayHelloLinting('James');

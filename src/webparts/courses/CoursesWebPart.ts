@@ -1,16 +1,19 @@
-import { Version } from "@microsoft/sp-core-library";
+import { Version } from '@microsoft/sp-core-library';
 import {
     IPropertyPaneConfiguration,
-    PropertyPaneTextField,
-} from "@microsoft/sp-property-pane";
-import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
-import { escape } from "@microsoft/sp-lodash-subset";
+    PropertyPaneTextField
+} from '@microsoft/sp-property-pane';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { escape } from '@microsoft/sp-lodash-subset';
+
 import { SPHttpClient, SPHttpClientResponse } from "@microsoft/sp-http";
-import styles from "./CoursesWebPart.module.scss";
-import * as strings from "CoursesWebPartStrings";
+
+import styles from './CoursesWebPart.module.scss';
+import * as strings from 'CoursesWebPartStrings';
 
 export interface ICoursesWebPartProps {
-    description: string;
+    count: number;
+    category: string;
 }
 
 interface ICourse {
@@ -22,87 +25,88 @@ interface ICourse {
     Duration: number;
     Price: number;
 }
-const url =
-    "https://selchuk.sharepoint.com/_api/lists/getbytitle('courses')/items";
-export default class CoursesWebPart extends BaseClientSideWebPart<
-    ICoursesWebPartProps
-> {
+
+const svcUrl = "https://selchuk.sharepoint.com/_api/Lists/GetByTitle('Courses')/Items";
+
+export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPartProps> {
+
     public render(): void {
         this.domElement.innerHTML = `
-      <div class="${styles.courses}">
-        <div class="${styles.container}">
-           <div class="${styles.row}">
-              <div class="${styles.column}">
-                <span class="${styles.title}">Courses!</span>
-                <p class="${styles.subTitle}">Customize SharePoint experiences using Web Parts.</p>
-                <div id="output">Loading...</div>
+      <div class="${ styles.courses}">
+        <div class="${ styles.container}">
+          <div class="${ styles.row}">
+            <div class="${ styles.column}">
+              <span class="${ styles.title}">Courses!</span>
+              <p class="${ styles.subTitle}">Course data from SP List.</p>
+              <div id="output">Loading...</div>
             </div>
           </div>
         </div>
       </div>`;
-        this.getData(url).then((courses: ICourse[]) => {
-            this.domElement.querySelector("#output").innerHTML = this.getHTML(
-                courses
-            );
-        });
+
+        this.getData(svcUrl, this.properties.count, this.properties.category)
+            .then((courses: ICourse[]) => {
+                this.domElement.querySelector("#output").innerHTML = this.getHTML(courses);
+            });
+
     }
+
     private getHTML(courses: ICourse[]): string {
         let html = "";
 
         for (let c of courses) {
             html += `
-      <div class="${styles.coursebox}">
-          ${c.CourseID} <br/>
-          ${c.Title} <br/>
-          ${c.Description} <br/>
-          ${c.Technology} <br/>
-          ${c.Price} <br/>
-          ${c.Duration}
+        <div class="${ styles.coursebox}">
+          ID: ${ c.CourseID} <br/>
+          NAME: ${ c.Title} <br/>
+          DESC: ${ c.Description} <br/>
+          TECH: ${ c.Technology} <br/>
+          PRICE: ${ c.Price} <br/>
+          HOURS: ${ c.Duration}
         </div>
       `;
         }
 
         return html;
     }
-    // private getData (url : string): Promise<ICourse[]>{
-    //   return this.context.spHttpClient.get(url,SPHttpClient.configurations.v1)
-    // .then (resp :SPHttpClientResponse) => {
-    //   return resp.json();
-    //   }).then(data => {
-    //     return data.value as ICourse[];
-    //   });
-    //   }
 
-    private getData(url: string): Promise<ICourse[]> {
-        return this.context.spHttpClient
-            .get(url, SPHttpClient.configurations.v1)
+    private getData(url: string, count: number, category?: string): Promise<ICourse[]> {
+        url += "?$top=" + count;
+
+        // if (category) {
+        //     url += `&$filter=Category eq ${category}`;
+        // }
+
+        return this.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
             .then((resp: SPHttpClientResponse) => {
                 return resp.json();
-            })
-            .then((data) => {
+            }).then(data => {
                 return data.value as ICourse[];
-            })
-            .catch((err) => {
+            }).catch(err => {
                 console.log("getData()-> Error in REST Call : " + err);
                 return [];
             });
     }
 
     private async getData2(url: string): Promise<ICourse[]> {
-        let resp = await this.context.spHttpClient.get(
-            url,
-            SPHttpClient.configurations.v1
-        );
+        try {
+            let resp = await this.context.spHttpClient.get(url, SPHttpClient.configurations.v1);
 
-        let data = await resp.json();
+            let data = await resp.json();
 
-        let courses = data.value as ICourse[];
+            let courses = data.value as ICourse[];
 
-        return Promise.resolve(courses);
+            return Promise.resolve(courses);
+
+        } catch (err) {
+            console.log(err);
+        }
+
+        return Promise.resolve([]);
     }
 
     protected get dataVersion(): Version {
-        return Version.parse("1.0");
+        return Version.parse('1.0');
     }
 
     protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -110,20 +114,34 @@ export default class CoursesWebPart extends BaseClientSideWebPart<
             pages: [
                 {
                     header: {
-                        description: strings.PropertyPaneDescription,
+                        description: strings.PropertyPaneDescription
                     },
                     groups: [
                         {
                             groupName: strings.BasicGroupName,
                             groupFields: [
-                                PropertyPaneTextField("description", {
-                                    label: strings.DescriptionFieldLabel,
-                                }),
-                            ],
-                        },
-                    ],
-                },
-            ],
+                                PropertyPaneTextField('count', {
+                                    label: "Count",
+                                    onGetErrorMessage: (value: string) => {
+                                        let c: number = parseInt(value);
+
+                                        if (isNaN(c)) {
+                                            return "Invalid number";
+                                        }
+
+                                        if (c <= 0) {
+                                            return "Count must be > 0";
+                                        }
+
+                                        return "";
+                                    },
+                                    deferredValidationTime: 300
+                                })
+                            ]
+                        }
+                    ]
+                }
+            ]
         };
     }
 }
