@@ -29,7 +29,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
     protected onInit(): Promise<void> {
         //Create Course Service
         this.provider = new CourseService(`${this.context.pageContext.web.absoluteUrl}/_api/Lists/GetByTitle('Courses')/Items`,
-            this.context)
+            this.context);
 
         // One call for Category choic values for the
         // Prop pane dropdown
@@ -45,17 +45,19 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                 console.log("Prop Pane Options : " + JSON.stringify(this.catValues));
             });
 
-        this.provider.addCourse({
-            CourseID: 7001,
+        this.provider.updateCourse(1, {
+            CourseID: 9001,
             Category: "Web Development",
-            Title: "ASP.NET MVC",
-            Description: "ASP.NET MVC Programming",
-            Duration: 20,
-            Price: 99,
-            Technology: "ASP.NET"
-        }).then(item => {
-            console.log("Added item : " + JSON.stringify(item));
+            Title: "Test ",
+            Description: "test Programming",
+            Duration: 60,
+            Price: 199,
+            Technology: "Test"
+        }).then(status => {
+            console.log("Item updated : " + status);
         });
+
+        this.provider.deleteCourse(10).then(status => console.log("Item deleted : " + status));
 
         return Promise.resolve();
     }
