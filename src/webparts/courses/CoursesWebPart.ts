@@ -3,18 +3,18 @@ import {
     IPropertyPaneConfiguration,
     PropertyPaneTextField,
     PropertyPaneDropdown,
-    IPropertyPaneDropdownOption
+    IPropertyPaneDropdownOption,
+    PropertyPaneDropdownOptionType
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { escape } from '@microsoft/sp-lodash-subset';
 
-import { SPHttpClient, SPHttpClientResponse } from "@microsoft/sp-http";
-
 import styles from './CoursesWebPart.module.scss';
 import * as strings from 'CoursesWebPartStrings';
 
-import { ICourse } from "../../common/ICourse";
+import * as $ from "jquery";
 
+import { ICourse } from "../../common/ICourse";
 import { CourseService } from "../../services/CourseService";
 
 export interface ICoursesWebPartProps {
@@ -42,28 +42,14 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                     } as IPropertyPaneDropdownOption
                 }));
 
-                console.log("Prop Pane Options : " + JSON.stringify(this.catValues));
+                //console.log("Prop Pane Options : " + JSON.stringify(this.catValues));
             });
-
-        this.provider.updateCourse(1, {
-            CourseID: 9001,
-            Category: "Web Development",
-            Title: "Test ",
-            Description: "test Programming",
-            Duration: 60,
-            Price: 199,
-            Technology: "Test"
-        }).then(status => {
-            console.log("Item updated : " + status);
-        });
-
-        this.provider.deleteCourse(10).then(status => console.log("Item deleted : " + status));
 
         return Promise.resolve();
     }
 
     public render(): void {
-        this.domElement.innerHTML = `
+        $(this.domElement).html(`
       <div class="${ styles.courses}">
         <div class="${ styles.container}">
           <div class="${ styles.row}">
@@ -74,32 +60,32 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
             </div>
           </div>
         </div>
-      </div>`;
+      </div>`);
 
         // Get the Courses
-        this.provider.getData(this.properties.count, this.properties.category)
+        this.provider.getData(this.properties.count, this.properties.category == "All" ? undefined : this.properties.category)
             .then((courses: ICourse[]) => {
-                this.domElement.querySelector("#output").innerHTML = this.getHTML(courses);
+                $("#output", this.domElement).html(this.getHTML(courses));
             });
     }
 
     private getHTML(courses: ICourse[]): string {
-        let html = "";
+        let html = "<table>";
 
         for (let c of courses) {
             html += `
-        <div class="${ styles.coursebox}">
-          ID: ${ c.CourseID} <br/>
-          NAME: ${ c.Title} <br/>
-          DESC: ${ c.Description} <br/>
-          TECH: ${ c.Technology} <br/>
-          PRICE: ${ c.Price} <br/>
-          HOURS: ${ c.Duration}
-        </div>
+        <tr>
+          <td>${ c.CourseID} </td>
+          <td>${ c.Title} </td>
+          <td>${ c.Description} </td>
+          <td> ${ c.Technology} </td>
+          <td>${ c.Price} </td>
+          <td>${ c.Duration} </td>
+        </tr>
       `;
         }
 
-        return html;
+        return html + "</table>";
     }
 
     protected get dataVersion(): Version {
@@ -136,7 +122,15 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                                 }),
                                 PropertyPaneDropdown('category', {
                                     label: 'Category',
-                                    options: this.catValues
+                                    options: [{
+                                        key: "All",
+                                        text: "Show All"
+                                    },
+                                    {
+                                        key: "div1",
+                                        text: "-",
+                                        type: PropertyPaneDropdownOptionType.Divider
+                                    }, ...this.catValues]
                                 })
                             ]
                         }
