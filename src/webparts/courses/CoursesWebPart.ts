@@ -1,7 +1,9 @@
 import { Version } from '@microsoft/sp-core-library';
 import {
     IPropertyPaneConfiguration,
-    PropertyPaneTextField
+    PropertyPaneTextField,
+    PropertyPaneDropdown,
+    IPropertyPaneDropdownOption
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { escape } from '@microsoft/sp-lodash-subset';
@@ -29,26 +31,47 @@ interface ICourse {
 const svcUrl = "https://selchuk.sharepoint.com/_api/Lists/GetByTitle('Courses')/Items";
 
 export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPartProps> {
+    private catValues: IPropertyPaneDropdownOption[] = [];
+    private courses: ICourse[] = [];
+
+    protected onInit(): Promise<void> {
+
+        // One call for Category choic values for the
+        // Prop pane dropdown
+        this.getCategories()
+            .then((data: string[]) => {
+                this.catValues = data.map((item => {
+                    return {
+                        key: item,
+                        text: item
+                    } as IPropertyPaneDropdownOption;
+                }));
+
+                console.log("Prop Pane Options : " + JSON.stringify(this.catValues));
+            });
+
+        return Promise.resolve();
+    }
 
     public render(): void {
         this.domElement.innerHTML = `
-      <div class="${ styles.courses}">
-        <div class="${ styles.container}">
-          <div class="${ styles.row}">
-            <div class="${ styles.column}">
-              <span class="${ styles.title}">Courses!</span>
-              <p class="${ styles.subTitle}">Course data from SP List.</p>
-              <div id="output">Loading...</div>
+        <div class="${ styles.courses}">
+          <div class="${ styles.container}">
+            <div class="${ styles.row}">
+              <div class="${ styles.column}">
+                <span class="${ styles.title}">Courses!</span>
+                <p class="${ styles.subTitle}">Course data from SP List.</p>
+                <div id="output">Loading...</div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>`;
+        </div>`;
 
+        // Get the Courses
         this.getData(svcUrl, this.properties.count, this.properties.category)
             .then((courses: ICourse[]) => {
                 this.domElement.querySelector("#output").innerHTML = this.getHTML(courses);
             });
-
     }
 
     private getHTML(courses: ICourse[]): string {
@@ -56,15 +79,15 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
 
         for (let c of courses) {
             html += `
-        <div class="${ styles.coursebox}">
-          ID: ${ c.CourseID} <br/>
-          NAME: ${ c.Title} <br/>
-          DESC: ${ c.Description} <br/>
-          TECH: ${ c.Technology} <br/>
-          PRICE: ${ c.Price} <br/>
-          HOURS: ${ c.Duration}
-        </div>
-      `;
+          <div class="${ styles.coursebox}">
+            ID: ${ c.CourseID} <br/>
+            NAME: ${ c.Title} <br/>
+            DESC: ${ c.Description} <br/>
+            TECH: ${ c.Technology} <br/>
+            PRICE: ${ c.Price} <br/>
+            HOURS: ${ c.Duration}
+          </div>
+        `;
         }
 
         return html;
@@ -73,9 +96,9 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
     private getData(url: string, count: number, category?: string): Promise<ICourse[]> {
         url += "?$top=" + count;
 
-        // if (category) {
-        //     url += `&$filter=Category eq ${category}`;
-        // }
+        if (category) {
+            url += `&$filter=Category eq '${category}'`;
+        }
 
         return this.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
             .then((resp: SPHttpClientResponse) => {
@@ -109,7 +132,21 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
         return Version.parse('1.0');
     }
 
-    protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    private getCategories(): Promise<string[]> {
+
+        return this.context.spHttpClient.get(this.context.pageContext.web.absoluteUrl
+            + "/_api/web/lists/GetByTitle('courses')/fields?$filter=EntityPropertyName eq 'Category'",
+            SPHttpClient.configurations.v1
+        ).then(resp => {
+            return resp.json();
+        }).then(data => {
+            console.log(JSON.stringify(data));
+
+            return data.value[0].Choices as string[];
+        });
+    }
+
+    protected getPropertyPaneConfiguration = (): IPropertyPaneConfiguration => {
         return {
             pages: [
                 {
@@ -136,6 +173,10 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                                         return "";
                                     },
                                     deferredValidationTime: 300
+                                }),
+                                PropertyPaneDropdown('category', {
+                                    label: 'Category',
+                                    options: this.catValues
                                 })
                             ]
                         }
