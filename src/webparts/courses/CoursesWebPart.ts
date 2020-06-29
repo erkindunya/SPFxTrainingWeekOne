@@ -25,6 +25,7 @@ export interface ICoursesWebPartProps {
 export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPartProps> {
     private provider: CourseService;
     private catValues: IPropertyPaneDropdownOption[] = [];
+    private currentID: number = 0;
 
     protected onInit(): Promise<void> {
         //Create Course Service
@@ -88,6 +89,22 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                 <input type="button" value="Save" id="btnaddsave" />&nbsp;
                 <input type="button" value="Cancel" id="btnaddcancel" />
               </div>
+              <div id="editform">
+                <h2>Edit Course</h2>
+                Course ID: <input type="text" id="ecourseid" /><br/>
+                Name: <input type="text" id="ecoursename" /><br/>
+                Details: <br/><textarea id="ecoursedesc" cols="40" rows="6"></textarea><br/>
+                Category: <select id="ecategory">
+                  ${
+            this.getCatSelectOptions(this.catValues)
+            }
+                </select><br/>
+                Technology: <input type="text" id="etechnology" /><br/>
+                Duration: <input type="text" id="eduration" /><br/>
+                Price: <input type="text" id="eprice" /><br/><br/>
+                <input type="button" value="Save" id="btneditsave" />&nbsp;
+                <input type="button" value="Cancel" id="btneditcancel" />
+              </div>
             </div>
           </div>
         </div>
@@ -136,14 +153,114 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
 
         });
 
+        $("#btneditcancel", this.domElement).on('click', () => {
+            $("#output", this.domElement).show();
+            $("#editform", this.domElement).hide();
+            $("#btnnew", this.domElement).show();
+        });
+
+        $("#btneditsave", this.domElement).on('click', () => {
+
+            if (!confirm("Do you want to save changed?")) {
+                $("#output", this.domElement).show();
+                $("#editform", this.domElement).hide();
+                $("#btnnew", this.domElement).show();
+                return;
+            }
+
+            let item: ICourse = {
+                CourseID: $("#ecourseid", this.domElement).val() as number,
+                Title: $("#ecoursename", this.domElement).val() as string,
+                Description: $("#ecoursedesc", this.domElement).val() as string,
+                Category: $("#ecategory", this.domElement).val() as string,
+                Duration: $("#eduration", this.domElement).val() as number,
+                Price: parseFloat($("#eprice", this.domElement).val() as string),
+                Technology: $("#etechnology", this.domElement).val() as string
+            };
+
+            this.provider.updateCourse(this.currentID, item).then(status => {
+                if (status) {
+                    alert("Item Updated!");
+                }
+
+                $("#output", this.domElement).show();
+                $("#editform", this.domElement).hide();
+                $("#btnnew", this.domElement).show();
+
+                this.render();
+            }).catch(err => {
+                alert("Error Updating Item!");
+                $("#output", this.domElement).show();
+                $("#editform", this.domElement).hide();
+                $("#btnnew", this.domElement).show();
+            });
+
+        });
+
         $("#addform", this.domElement).hide();
+        $("#editform", this.domElement).hide();
 
 
         // Get the Courses
         this.provider.getData(this.properties.count, this.properties.category == "All" ? undefined : this.properties.category)
             .then((courses: ICourse[]) => {
                 $("#output", this.domElement).html(this.getHTML(courses));
+
+                // Register the Edit/Del Link handlers
+                this.registerDelHandlers();
+
+                this.registerEditHandlers();
             });
+    }
+
+    private registerEditHandlers() {
+        $('a[id^="edt"]', this.domElement).on('click', (event: JQuery.ClickEvent<HTMLElement>) => {
+            event.preventDefault();
+
+            let itemID: number = parseInt($(event.currentTarget).attr("href"));
+
+            this.currentID = itemID;
+
+            this.provider.getItemById(itemID).then((course: ICourse) => {
+                $("#output", this.domElement).hide();
+                $("#editform", this.domElement).show();
+                $("#btnnew", this.domElement).hide();
+
+                // Populate the edit form
+                $("#ecourseid", this.domElement).val(course.CourseID.toString());
+                $("#ecoursename", this.domElement).val(course.Title);
+                $("#ecoursedesc", this.domElement).val(course.Description);
+                $("#ecategory", this.domElement).val(course.Category);
+                $("#eduration", this.domElement).val(course.Duration.toString());
+                $("#eprice", this.domElement).val(course.Price.toString());
+                $("#etechnology", this.domElement).val(course.Technology);
+                $("#ecourseid", this.domElement).focus();
+            }).catch(err => {
+                alert("Unable to fetch details!");
+                $("#output", this.domElement).show();
+                $("#editform", this.domElement).hide();
+                $("#btnnew", this.domElement).show();
+            });
+        });
+    }
+
+    private registerDelHandlers() {
+        $('a[id^="del"]', this.domElement).on('click', (event: JQuery.ClickEvent<HTMLElement>) => {
+            event.preventDefault();
+
+            let itemID: number = parseInt($(event.currentTarget).attr("href"));
+
+            if (confirm("Delete this Course?")) {
+                this.provider.deleteCourse(itemID).then(success => {
+                    if (success) {
+                        alert("Course Deleted!");
+                        this.render();
+                    }
+                }).catch(err => {
+                    alert("Error deleting course! : " + err);
+                });
+            }
+        });
     }
 
     private getHTML(courses: ICourse[]): string {
@@ -157,14 +274,14 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                   <th>Technology</th>
                   <th>Price<th>
                   <th>Hours</th>
+                  <th>&nbsp;</th>
                 </tr>`;
 
         for (let c of courses) {
             html += `
         <tr class="${ styles.courserow}">
           <td>
-            <a href="${ c["ID"]}">Edit</a>&nbsp;
-            <a href="${ c["ID"]}">Del</a>
+            <a href="${ c["ID"]}" id="edt">Edit</a>&nbsp;
           </td>
           <td>${ c.CourseID} </td>
           <td>${ c.Title} </td>
@@ -173,6 +290,9 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
           <td> ${ c.Technology} </td>
           <td>${ c.Price} </td>
           <td>${ c.Duration} </td>
+          <td>
+            <a href="${ c["ID"]}" id="del">Del</a>
+          </td>
         </tr>
       `;
         }

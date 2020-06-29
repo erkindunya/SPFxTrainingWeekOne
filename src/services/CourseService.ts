@@ -80,7 +80,7 @@ export class CourseService {
   public getItemById(id: number): Promise<ICourse> {
     let url = this.url;
 
-    url += `&$filter=ID eq ${id}`;
+    url += `?$filter=ID eq ${id}`;
 
     return this.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
       .then((resp: SPHttpClientResponse) => {
