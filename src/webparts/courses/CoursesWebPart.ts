@@ -42,10 +42,22 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                     } as IPropertyPaneDropdownOption
                 }));
 
+                $("#category", this.domElement).html(this.getCatSelectOptions(this.catValues));
+
                 //console.log("Prop Pane Options : " + JSON.stringify(this.catValues));
             });
 
         return Promise.resolve();
+    }
+
+    private getCatSelectOptions(items: IPropertyPaneDropdownOption[]): string {
+        let html = "";
+
+        items.forEach(i => {
+            html += `<option value='${i.key}'>${i.text}</option>`;
+        });
+
+        return html;
     }
 
     public render(): void {
@@ -55,12 +67,45 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
           <div class="${ styles.row}">
             <div class="${ styles.column}">
               <span class="${ styles.title}">Courses!</span>
-              <p class="${ styles.subTitle}">Course data from SP List.</p>
+              <p class="${ styles.description}">List of Courses</p>
+              <div>
+                <input type="button" id="btnnew" value="New..." />
+              </div>
               <div id="output">Loading...</div>
+              <div id="addform">
+                <h2>Add Course</h2>
+                Course ID: <input type="text" id="courseid" /><br/>
+                Name: <input type="text" id="coursename" /><br/>
+                Details: <br/><textarea id="coursedesc" cols="40" rows="6"></textarea><br/>
+                Category: <select id="category">
+                  ${
+            this.getCatSelectOptions(this.catValues)
+            }
+                </select><br/>
+                Technology: <input type="text" id="technology" /><br/>
+                Duration: <input type="text" id="duration" /><br/>
+                Price: <input type="text" id="price" /><br/><br/>
+                <input type="button" value="Save" id="btnaddsave" />&nbsp;
+                <input type="button" value="Cancel" id="btnaddcancel" />
+              </div>
             </div>
           </div>
         </div>
       </div>`);
+
+        // New Button Event Handlers
+        $("#btnnew", this.domElement).on('click', () => {
+            $("#output", this.domElement).hide();
+            $("#addform", this.domElement).show();
+            $("#btnnew").hide();
+        });
+
+        $("#btnaddcancel", this.domElement).on('click', () => {
+            $("#output", this.domElement).show();
+            $("#addform", this.domElement).hide();
+            $("#btnnew").show();
+        });
+
 
         // Get the Courses
         this.provider.getData(this.properties.count, this.properties.category == "All" ? undefined : this.properties.category)
@@ -70,13 +115,23 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
     }
 
     private getHTML(courses: ICourse[]): string {
-        let html = "<table>";
+        let html = `<table>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Details</th>
+                  <th>Technology</th>
+                  <th>Price<th>
+                  <th>Hours</th>
+                </tr>`;
 
         for (let c of courses) {
             html += `
         <tr>
           <td>${ c.CourseID} </td>
           <td>${ c.Title} </td>
+          <td>${ c.Category} <td>
           <td>${ c.Description} </td>
           <td> ${ c.Technology} </td>
           <td>${ c.Price} </td>
