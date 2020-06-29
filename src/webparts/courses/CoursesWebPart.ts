@@ -106,6 +106,34 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
             $("#btnnew").show();
         });
 
+        $("#btnaddsave", this.domElement).on('click', () => {
+            let item: ICourse = {
+                CourseID: parseInt($("courseid").val() as string),
+                Title: $("coursename").val() as string,
+                Description: $("coursedesc").val() as string,
+                Category: $("category").val() as string,
+                Duration: parseInt($("duration").val() as string),
+                Price: parseFloat($("price").val() as string),
+                Technology: $("technology").val() as string
+            };
+
+            this.provider.addCourse(item).then(newItem => {
+                console.log("Add success!");
+                alert("Add Item!");
+                $("#output", this.domElement).show();
+                $("#addform").hide();
+                $("#btnnew").show();
+
+                this.render();
+            }).catch(err => {
+                alert("Error adding Item!");
+                $("#output", this.domElement).show();
+                $("#addform").hide();
+                $("#btnnew").show();
+            });
+
+        })
+
 
         // Get the Courses
         this.provider.getData(this.properties.count, this.properties.category == "All" ? undefined : this.properties.category)
