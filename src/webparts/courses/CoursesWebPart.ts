@@ -97,42 +97,46 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
         $("#btnnew", this.domElement).on('click', () => {
             $("#output", this.domElement).hide();
             $("#addform", this.domElement).show();
-            $("#btnnew").hide();
+            $("#btnnew", this.domElement).hide();
         });
 
         $("#btnaddcancel", this.domElement).on('click', () => {
             $("#output", this.domElement).show();
             $("#addform", this.domElement).hide();
-            $("#btnnew").show();
+            $("#btnnew", this.domElement).show();
         });
 
         $("#btnaddsave", this.domElement).on('click', () => {
             let item: ICourse = {
-                CourseID: parseInt($("courseid").val() as string),
-                Title: $("coursename").val() as string,
-                Description: $("coursedesc").val() as string,
-                Category: $("category").val() as string,
-                Duration: parseInt($("duration").val() as string),
-                Price: parseFloat($("price").val() as string),
-                Technology: $("technology").val() as string
+                CourseID: $("#courseid", this.domElement).val() as number,
+                Title: $("#coursename", this.domElement).val() as string,
+                Description: $("#coursedesc", this.domElement).val() as string,
+                Category: $("#category", this.domElement).val() as string,
+                Duration: $("#duration", this.domElement).val() as number,
+                Price: parseFloat($("#price", this.domElement).val() as string),
+                Technology: $("#technology", this.domElement).val() as string
             };
+
+            console.log("New Item : " + JSON.stringify(item));
 
             this.provider.addCourse(item).then(newItem => {
                 console.log("Add success!");
-                alert("Add Item!");
+                alert("Added Item!");
                 $("#output", this.domElement).show();
-                $("#addform").hide();
-                $("#btnnew").show();
+                $("#addform", this.domElement).hide();
+                $("#btnnew", this.domElement).show();
 
                 this.render();
             }).catch(err => {
                 alert("Error adding Item!");
                 $("#output", this.domElement).show();
-                $("#addform").hide();
-                $("#btnnew").show();
+                $("#addform", this.domElement).hide();
+                $("#btnnew", this.domElement).show();
             });
 
-        })
+        });
+
+        $("#addform", this.domElement).hide();
 
 
         // Get the Courses
@@ -145,6 +149,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
     private getHTML(courses: ICourse[]): string {
         let html = `<table>
                 <tr>
+                  <th>&nbsp;</th>
                   <th>ID</th>
                   <th>Name</th>
                   <th>Category</th>
@@ -156,7 +161,11 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
 
         for (let c of courses) {
             html += `
-        <tr>
+        <tr class="${ styles.courserow}">
+          <td>
+            <a href="${ c["ID"]}">Edit</a>&nbsp;
+            <a href="${ c["ID"]}">Del</a>
+          </td>
           <td>${ c.CourseID} </td>
           <td>${ c.Title} </td>
           <td>${ c.Category} <td>

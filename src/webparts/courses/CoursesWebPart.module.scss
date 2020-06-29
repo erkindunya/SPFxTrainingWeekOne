@@ -1,6 +1,17 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
 .courses {
+
+    .courserow {
+        padding: 2px;
+        margin: 2px;
+    }
+
+    .courserow:hover {
+        background-color: darkcyan;
+        color: black;
+    }
+
     .container {
         max-width: 700px;
         margin: 0px auto;
