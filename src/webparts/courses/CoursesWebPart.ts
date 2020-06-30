@@ -30,6 +30,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
 
     protected onInit(): Promise<void> {
         //Create Course Service
+        // this build URL and it is dynamicly build as web part runs so it captures here  ${this.context.pageContext.web.absoluteUrl} then it goes to CourseService.ts line 27, Update and Delete addes extra Rest filter and 
         this.provider = new CourseService(`${this.context.pageContext.web.absoluteUrl}/_api/Lists/GetByTitle('Courses')/Items`,
             this.context);
 
@@ -266,7 +267,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                         alert("Course Deleted!");
                         this.render();
                     } else {
-                        alert("Could not delete (item missing/modified)");
+                        alert("Could not delete (Item missing/modified)");
                     }
                 }).catch(err => {
                     alert("Error deleting course! : " + err);

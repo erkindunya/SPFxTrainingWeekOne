@@ -22,7 +22,8 @@ export class CourseService {
     });
   }
 
-  // https:/.../_api/Lists/GetByTitle('Courses')/Items(10)
+  // this build URL and it is dynamicly build as web part runs so it captures here  (this.url + `(${id})then it goes to  CourseWebPart.ts line 34, Update and Delete addes extra Rest filter and 
+  // https:/.../_api/Lists/GetByTitle('Courses')/Items(10) 
 
   public updateCourse(id: number, item: ICourse, etag: string): Promise<boolean> {
     return this.context.spHttpClient.post(this.url + `(${id})`, SPHttpClient.configurations.v1, {
@@ -34,7 +35,7 @@ export class CourseService {
       },
       body: JSON.stringify(item)
     }).then(resp => {
-      console.log("Status: " + resp.statusText);
+      console.log("Status Text: " + resp.statusText);
       return resp.ok;
     }).catch(err => {
       console.log("Error updating Course : " + err);
