@@ -214,7 +214,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
     }
 
     private registerEditHandlers() {
-        $('a[id^="edt"]', this.domElement).on('click', (event: JQuery.ClickEvent<HTMLElement>) => {
+        $('a[id^="edt"]', this.domElement).on('click', (event) => {
             event.preventDefault();
 
             let itemID: number = parseInt($(event.currentTarget).attr("href"));
@@ -245,7 +245,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
     }
 
     private registerDelHandlers() {
-        $('a[id^="del"]', this.domElement).on('click', (event: JQuery.ClickEvent<HTMLElement>) => {
+        $('a[id^="del"]', this.domElement).on('click', (event) => {
             event.preventDefault();
 
             let itemID: number = parseInt($(event.currentTarget).attr("href"));
