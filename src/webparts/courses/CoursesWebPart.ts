@@ -26,6 +26,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
     private provider: CourseService;
     private catValues: IPropertyPaneDropdownOption[] = [];
     private currentID: number = 0;
+    private currentETag: string = '';
 
     protected onInit(): Promise<void> {
         //Create Course Service
@@ -44,7 +45,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                 }));
 
                 $("#category", this.domElement).html(this.getCatSelectOptions(this.catValues));
-
+                $("#ecategory", this.domElement).html(this.getCatSelectOptions(this.catValues));
                 //console.log("Prop Pane Options : " + JSON.stringify(this.catValues));
             });
 
@@ -178,7 +179,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                 Technology: $("#etechnology", this.domElement).val() as string
             };
 
-            this.provider.updateCourse(this.currentID, item).then(status => {
+            this.provider.updateCourse(this.currentID, item, this.currentETag).then(status => {
                 if (status) {
                     alert("Item Updated!");
                 }
@@ -204,6 +205,8 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
         // Get the Courses
         this.provider.getData(this.properties.count, this.properties.category == "All" ? undefined : this.properties.category)
             .then((courses: ICourse[]) => {
+                console.log("List Data : " + JSON.stringify(courses));
+
                 $("#output", this.domElement).html(this.getHTML(courses));
 
                 // Register the Edit/Del Link handlers
@@ -222,6 +225,10 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
             this.currentID = itemID;
 
             this.provider.getItemById(itemID).then((course: ICourse) => {
+                this.currentETag = course["@odata.etag"];
+
+                console.log("Etage : " + this.currentETag);
+
                 $("#output", this.domElement).hide();
                 $("#editform", this.domElement).show();
                 $("#btnnew", this.domElement).hide();
