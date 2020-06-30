@@ -34,19 +34,20 @@ export class CourseService {
       },
       body: JSON.stringify(item)
     }).then(resp => {
+      console.log("Status: " + resp.statusText);
       return resp.ok;
     }).catch(err => {
-      console.log("Error updating Course");
+      console.log("Error updating Course : " + err);
       return false;
     });
   }
 
-  public deleteCourse(id: number): Promise<boolean> {
+  public deleteCourse(id: number, etag: string): Promise<boolean> {
     return this.context.spHttpClient.post(this.url + `(${id})`, SPHttpClient.configurations.v1, {
       headers: {
         "Accept": "application/json",
         "X-Http-Method": "DELETE",
-        "IF-Match": '*'
+        "IF-Match": etag
       }
     }).then(resp => {
       return resp.ok;
@@ -107,6 +108,3 @@ export class CourseService {
   }
 
 }
-
-
-

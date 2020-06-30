@@ -46,6 +46,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
 
                 $("#category", this.domElement).html(this.getCatSelectOptions(this.catValues));
                 $("#ecategory", this.domElement).html(this.getCatSelectOptions(this.catValues));
+
                 //console.log("Prop Pane Options : " + JSON.stringify(this.catValues));
             });
 
@@ -182,6 +183,8 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
             this.provider.updateCourse(this.currentID, item, this.currentETag).then(status => {
                 if (status) {
                     alert("Item Updated!");
+                } else {
+                    alert("Error updating item! (concurrency mismatch)");
                 }
 
                 $("#output", this.domElement).show();
@@ -258,10 +261,12 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
             let itemID: number = parseInt($(event.currentTarget).attr("href"));
 
             if (confirm("Delete this Course?")) {
-                this.provider.deleteCourse(itemID).then(success => {
+                this.provider.deleteCourse(itemID, this.currentETag).then(success => {
                     if (success) {
                         alert("Course Deleted!");
                         this.render();
+                    } else {
+                        alert("Could not delete (item missing/modified)");
                     }
                 }).catch(err => {
                     alert("Error deleting course! : " + err);
