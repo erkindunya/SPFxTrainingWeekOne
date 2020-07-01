@@ -14,25 +14,57 @@ $margin-left: 5px;
 $margin-bott: 10px;
 $margin-right: 5px;
 
-.tablerow {
-    $row-padding: 10px;
-
-    background-color: $color-lightblue;
+/* Mixins */
+@mixin font-info {
     font-family: $std-font-family;
     font-size: $std-font-size;
+}
+
+@mixin colors-font {
+    background-color: $color-lightblue;
+    @include font-info;
     padding: $row-padding;
+}
+
+.tablerow {
+    $row-padding: 10px !global;
+
+    @include colors-font;
     border: $border-width $border-style $border-color;
     margin: $margin-top $margin-left $margin-bott $margin-right;
 }
 
 .tablecell {
-    background-color: $color-lightblue;
-    font-family: $std-font-family;
-    font-size: $std-font-size;
+    @include colors-font;
+}
+
+.headingmain {
+    @include font-info;
 }
 
 .box {
     background-color: $color-lightblue;
-    font-family: $std-font-family;
-    font-size: $std-font-size;
+
+    font: {
+        family: $std-font-family;
+        size: $std-font-size;
+    }
+}
+
+
+nav {
+    ul {
+        margin: 10px;
+        padding: 5px;
+        list-style: none;
+    }
+
+    li {
+        display: inline-block;
+    }
+
+    a {
+        display: block;
+        text-decoration: node;
+    }
 }
