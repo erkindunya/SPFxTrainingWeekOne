@@ -1,0 +1,38 @@
+/* Variables */
+$color-lightblue: lightgreen;
+$std-font-family: Helvetica,
+Sans-Serif,
+Courier;
+$std-font-size: 12px;
+
+$border-width: 1px;
+$border-style: solid;
+$border-color:gray;
+
+$margin-top: 0px;
+$margin-left: 5px;
+$margin-bott: 10px;
+$margin-right: 5px;
+
+.tablerow {
+    $row-padding: 10px;
+
+    background-color: $color-lightblue;
+    font-family: $std-font-family;
+    font-size: $std-font-size;
+    padding: $row-padding;
+    border: $border-width $border-style $border-color;
+    margin: $margin-top $margin-left $margin-bott $margin-right;
+}
+
+.tablecell {
+    background-color: $color-lightblue;
+    font-family: $std-font-family;
+    font-size: $std-font-size;
+}
+
+.box {
+    background-color: $color-lightblue;
+    font-family: $std-font-family;
+    font-size: $std-font-size;
+}

@@ -65,6 +65,14 @@
           "manifest": "./src/webparts/courses/CoursesWebPart.manifest.json"
         }
       ]
+    },
+    "saas-demo-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/saasDemo/SaasDemoWebPart.js",
+          "manifest": "./src/webparts/saasDemo/SaasDemoWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {
@@ -79,6 +87,7 @@
     "JqDemoWebPartStrings": "lib/webparts/jqDemo/loc/{locale}.js",
     "DataTableDemoWebPartStrings": "lib/webparts/dataTableDemo/loc/{locale}.js",
     "PropertyPaneDemoWebPartStrings": "lib/webparts/propertyPaneDemo/loc/{locale}.js",
-    "CoursesWebPartStrings": "lib/webparts/courses/loc/{locale}.js"
+    "CoursesWebPartStrings": "lib/webparts/courses/loc/{locale}.js",
+    "SaasDemoWebPartStrings": "lib/webparts/saasDemo/loc/{locale}.js"
   }
 }
