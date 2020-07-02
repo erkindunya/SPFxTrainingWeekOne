@@ -1,70 +1,82 @@
-/* Variables */
-$color-lightblue: lightgreen;
-$std-font-family: Helvetica,
-Sans-Serif,
-Courier;
-$std-font-size: 12px;
+// /* Variables */
+// $color-lightblue: lightgreen;
+// $std-font-family: Helvetica,
+// Sans-Serif,
+// Courier;
+// $std-font-size: 12px;
 
-$border-width: 1px;
-$border-style: solid;
-$border-color:gray;
+// $border-width: 1px;
+// $border-style: solid;
+// $border-color:gray;
 
-$margin-top: 0px;
-$margin-left: 5px;
-$margin-bott: 10px;
-$margin-right: 5px;
+// $margin-top: 0px;
+// $margin-left: 5px;
+// $margin-bott: 10px;
+// $margin-right: 5px;
 
-/* Mixins */
-@mixin font-info {
-    font-family: $std-font-family;
-    font-size: $std-font-size;
-}
+// /* Mixins */
+// @mixin font-info($color, $size: 10px) {
+//     font-family: $std-font-family;
+//     font-size: $size;
+//     color: $color;
+// }
 
-@mixin colors-font {
-    background-color: $color-lightblue;
-    @include font-info;
-    padding: $row-padding;
-}
+// @mixin colors-font {
+//     background-color: $color-lightblue;
+//     @include font-info(blue);
+//     padding: $row-padding;
+// }
 
-.tablerow {
-    $row-padding: 10px !global;
+// .defaultbutton {
+//     padding: 10px;
+//     border-radius: 5px;
+//     background-color: $color-lightblue;
+//     color: black;
+// }
 
-    @include colors-font;
-    border: $border-width $border-style $border-color;
-    margin: $margin-top $margin-left $margin-bott $margin-right;
-}
+// .primarybutton {
+//     @extend .defaultbutton;
+// }
 
-.tablecell {
-    @include colors-font;
-}
+// .tablerow {
+//     $row-padding: 10px !global;
 
-.headingmain {
-    @include font-info;
-}
+//     @include colors-font;
+//     border: $border-width $border-style $border-color;
+//     margin: $margin-top $margin-left $margin-bott $margin-right;
+// }
 
-.box {
-    background-color: $color-lightblue;
+// .tablecell {
+//     @include colors-font;
+// }
 
-    font: {
-        family: $std-font-family;
-        size: $std-font-size;
-    }
-}
+// .headingmain {
+//     @include font-info;
+// }
+
+// .box {
+//     background-color: $color-lightblue;
+
+//     font: {
+//         family: $std-font-family;
+//         size: $std-font-size;
+//     }
+// }
 
 
-nav {
-    ul {
-        margin: 10px;
-        padding: 5px;
-        list-style: none;
-    }
+// nav {
+//     ul {
+//         margin: 10px;
+//         padding: 5px;
+//         list-style: none;
+//     }
 
-    li {
-        display: inline-block;
-    }
+//     li {
+//         display: inline-block;
+//     }
 
-    a {
-        display: block;
-        text-decoration: node;
-    }
-}
+//     a {
+//         display: block;
+//         text-decoration: node;
+//     }
+// }
