@@ -35,7 +35,27 @@ const data: ICustomer[] = [
         name: "YUI Ltd",
         phone: "53434344",
         balance: 9652.40
+    },
+    {
+        id: 4,
+        name: "YUI Ltd",
+        phone: "53434344",
+        balance: 9652.40
+    },
+    {
+        id: 4,
+        name: "YUI Ltd",
+        phone: "53434344",
+        balance: 9652.40
+    },
+    {
+        id: 4,
+        name: "YUI Ltd",
+        phone: "53434344",
+        balance: 9652.40
     }
+
+
 
 ];
 

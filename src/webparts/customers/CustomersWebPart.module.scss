@@ -36,12 +36,11 @@
 
     .quarter {
         @include ms-Grid-col;
-        @include ms-md3;
         @include ms-lg3;
         @include ms-xl3;
         @include ms-xxl3;
-        @include ms-sm6;
         background-color: darkkhaki;
+        @include ms-lgPush1;
     }
 
     .threeforuth {
