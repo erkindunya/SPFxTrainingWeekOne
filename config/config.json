@@ -73,6 +73,14 @@
           "manifest": "./src/webparts/saasDemo/SaasDemoWebPart.manifest.json"
         }
       ]
+    },
+    "pn-p-demo-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/pnPDemo/PnPDemoWebPart.js",
+          "manifest": "./src/webparts/pnPDemo/PnPDemoWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {
@@ -88,6 +96,7 @@
     "DataTableDemoWebPartStrings": "lib/webparts/dataTableDemo/loc/{locale}.js",
     "PropertyPaneDemoWebPartStrings": "lib/webparts/propertyPaneDemo/loc/{locale}.js",
     "CoursesWebPartStrings": "lib/webparts/courses/loc/{locale}.js",
-    "SaasDemoWebPartStrings": "lib/webparts/saasDemo/loc/{locale}.js"
+    "SaasDemoWebPartStrings": "lib/webparts/saasDemo/loc/{locale}.js",
+    "PnPDemoWebPartStrings": "lib/webparts/pnPDemo/loc/{locale}.js"
   }
 }
