@@ -45,21 +45,38 @@ export default class PnPDemoWebPart extends BaseClientSideWebPart<IPnPDemoWebPar
       </div>`;
 
     // Add Items
-    console.log("Adding new Item...");
+    // console.log("Adding new Item...");
 
-    this.provider.addItem({
-      CourseID: 8001,
-      Title: 'SQL Server Programming',
-      Description: 'SQL Server Triggers and Procedures',
-      Category: 'Web Development',
+    // this.provider.addItem({
+    //   CourseID: 8001,
+    //   Title: 'SQL Server Programming',
+    //   Description: 'SQL Server Triggers and Procedures',
+    //   Category: 'Web Development',
+    //   Duration: 40,
+    //   Price: 99.25,
+    //   Technology: 'Databases'
+    // } as ICourse).then(item => {
+    //   console.log("Added item successfully!");
+    //   console.log(`Item ID: ${item['ID']} and ETag: ${item["etag"]}`);
+    // }).catch(err => {
+    //   console.log("Error adding item : " + err);
+    // });
+
+    console.log("Updating item...");
+    this.provider.updateItem(5, {
+      CourseID: 1007,
+      Title: 'Swift Programming for iOS',
+      Description: 'Mobile App Dev with Swift',
+      Category: 'Mobile Development',
+      Technology: 'Swift',
       Duration: 40,
-      Price: 99.25,
-      Technology: 'Databases'
-    } as ICourse).then(item => {
-      console.log("Added item successfully!");
-      console.log(`Item ID: ${item['ID']} and ETag: ${item["etag"]}`);
-    }).catch(err => {
-      console.log("Error adding item : " + err);
+      Price: 200
+    } as ICourse).then(flag => {
+      if (flag) {
+        console.log("Item Updated successfully!");
+      } else {
+        console.log("Item update failed!");
+      }
     });
 
     this.provider.getCategories().then(output => {
