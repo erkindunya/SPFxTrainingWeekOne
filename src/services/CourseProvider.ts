@@ -28,7 +28,7 @@ export class CourseProvider {
       })
       .catch(err => {
         console.log("Updated Failed: " + err);
-        return err;
+        return false;
       });
   }
 
@@ -42,6 +42,24 @@ export class CourseProvider {
       .top(count)
       .filter(`Category eq ${category}`)
       .get<ICourse[]>();
+  }
+
+  // using CAML query to filter items
+  public getItemsByTitle(title: string): Promise<ICourse> {
+    let query: string = `<View>
+        <Where>
+          <Eq>
+            <FieldRef Name="Title" />
+            <Value Type="Text">${ title}</Value>
+          </Eq>
+        </Where>
+      </View>`;
+
+    return sp.web.lists.getByTitle(this.listName).getItemsByCAMLQuery({
+      ViewXml: query
+    }).then((courses: ICourse[]) => {
+      return courses[0] as ICourse;
+    })
   }
 
   public getItems(count: number = 100): Promise<ICourse[]> {
