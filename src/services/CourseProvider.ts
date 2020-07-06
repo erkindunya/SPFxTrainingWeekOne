@@ -32,6 +32,11 @@ export class CourseProvider {
       });
   }
 
+  public deleteItem(id: number): Promise<any> {
+    return sp.web.lists.getByTitle(this.listName).items.getById(id)
+      .delete();
+  }
+
   public getItemsByCategory(count: number = 100, category: string): Promise<ICourse[]> {
     return sp.web.lists.getByTitle(this.listName).items
       .top(count)
