@@ -20,9 +20,9 @@ export class CourseProvider {
       });
   }
 
-  public updateItem(id: number, item: ICourse): Promise<boolean> {
+  public updateItem(id: number, item: ICourse, eTag: string): Promise<boolean> {
     return sp.web.lists.getByTitle(this.listName).items.getById(id)
-      .update(item)
+      .update(item, eTag)
       .then((result: IItemUpdateResult) => {
         return true;
       })
@@ -32,19 +32,24 @@ export class CourseProvider {
       });
   }
 
-  public deleteItem(id: number): Promise<any> {
+  public deleteItem(id: number, eTag: string): Promise<any> {
     return sp.web.lists.getByTitle(this.listName).items.getById(id)
-      .delete();
+      .delete(eTag);
   }
 
   public getItemsByCategory(count: number = 100, category: string): Promise<ICourse[]> {
+    if (!category) {
+      return sp.web.lists.getByTitle(this.listName).items
+        .top(count)
+        .get<ICourse[]>();
+    }
+
     return sp.web.lists.getByTitle(this.listName).items
       .top(count)
-      .filter(`Category eq ${category}`)
+      .filter(`Category eq '${category}'`)
       .get<ICourse[]>();
   }
 
-  // using CAML query to filter items
   public getItemsByTitle(title: string): Promise<ICourse> {
     let query: string = `<View>
         <Where>

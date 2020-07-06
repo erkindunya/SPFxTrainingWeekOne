@@ -15,7 +15,7 @@ import * as strings from 'CoursesWebPartStrings';
 import * as $ from "jquery";
 
 import { ICourse } from "../../common/ICourse";
-import { CourseService } from "../../services/CourseService";
+import { CourseProvider } from "../../services/CourseProvider";
 
 export interface ICoursesWebPartProps {
     count: number;
@@ -23,16 +23,14 @@ export interface ICoursesWebPartProps {
 }
 
 export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPartProps> {
-    private provider: CourseService;
+    private provider: CourseProvider;
     private catValues: IPropertyPaneDropdownOption[] = [];
     private currentID: number = 0;
     private currentETag: string = '';
 
     protected onInit(): Promise<void> {
         //Create Course Service
-        // this build URL and it is dynamicly build as web part runs so it captures here  ${this.context.pageContext.web.absoluteUrl} then it goes to CourseService.ts line 27, Update and Delete addes extra Rest filter and 
-        this.provider = new CourseService(`${this.context.pageContext.web.absoluteUrl}/_api/Lists/GetByTitle('Courses')/Items`,
-            this.context);
+        this.provider = new CourseProvider('Courses', this.context);
 
         // One call for Category choic values for the
         // Prop pane dropdown
@@ -139,7 +137,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
 
             console.log("New Item : " + JSON.stringify(item));
 
-            this.provider.addCourse(item).then(newItem => {
+            this.provider.addItem(item).then(newItem => {
                 console.log("Add success!");
                 alert("Added Item!");
                 $("#output", this.domElement).show();
@@ -181,7 +179,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                 Technology: $("#etechnology", this.domElement).val() as string
             };
 
-            this.provider.updateCourse(this.currentID, item, this.currentETag).then(status => {
+            this.provider.updateItem(this.currentID, item, this.currentETag).then(status => {
                 if (status) {
                     alert("Item Updated!");
                 } else {
@@ -207,7 +205,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
 
 
         // Get the Courses
-        this.provider.getData(this.properties.count, this.properties.category == "All" ? undefined : this.properties.category)
+        this.provider.getItemsByCategory(this.properties.count, this.properties.category == "All" ? undefined : this.properties.category)
             .then((courses: ICourse[]) => {
                 console.log("List Data : " + JSON.stringify(courses));
 
@@ -221,7 +219,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
     }
 
     private registerEditHandlers() {
-        $('a[id^="edt"]', this.domElement).on('click', (event) => {
+        $('a[id^="edt"]', this.domElement).on('click', (event: JQuery.ClickEvent<HTMLElement>) => {
             event.preventDefault();
 
             let itemID: number = parseInt($(event.currentTarget).attr("href"));
@@ -229,7 +227,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
             this.currentID = itemID;
 
             this.provider.getItemById(itemID).then((course: ICourse) => {
-                this.currentETag = course["@odata.etag"];
+                this.currentETag = course["odata.etag"];
 
                 console.log("Etage : " + this.currentETag);
 
@@ -256,13 +254,13 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
     }
 
     private registerDelHandlers() {
-        $('a[id^="del"]', this.domElement).on('click', (event) => {
+        $('a[id^="del"]', this.domElement).on('click', (event: JQuery.ClickEvent<HTMLElement>) => {
             event.preventDefault();
 
             let itemID: number = parseInt($(event.currentTarget).attr("href"));
 
             if (confirm("Delete this Course?")) {
-                this.provider.deleteCourse(itemID, this.currentETag).then(success => {
+                this.provider.deleteItem(itemID, this.currentETag).then(success => {
                     if (success) {
                         alert("Course Deleted!");
                         this.render();

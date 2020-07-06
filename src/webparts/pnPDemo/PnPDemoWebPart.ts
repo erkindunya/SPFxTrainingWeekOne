@@ -62,35 +62,35 @@ export default class PnPDemoWebPart extends BaseClientSideWebPart<IPnPDemoWebPar
       console.log("Error adding item : " + err);
     });*/
 
-    console.log("Updating item...");
-    this.provider.updateItem(7, {
-      CourseID: 1007,
-      Title: 'Swift Programming for iOS',
-      Description: 'Mobile App Dev with Swift',
-      Category: 'Mobile Development',
-      Technology: 'Swift',
-      Duration: 40,
-      Price: 200
-    } as ICourse).then(flag => {
-      if (flag) {
-        console.log("Item Updated successfully!");
-      } else {
-        console.log("Item update failed!");
-      }
-    });
+    // console.log("Updating item...");
+    // this.provider.updateItem(7, {
+    //   CourseID: 1007,
+    //   Title: 'Swift Programming for iOS',
+    //   Description: 'Mobile App Dev with Swift',
+    //   Category: 'Mobile Development',
+    //   Technology: 'Swift',
+    //   Duration: 40,
+    //   Price: 200
+    // } as ICourse).then(flag => {
+    //   if (flag) {
+    //     console.log("Item Updated successfully!");
+    //   } else {
+    //     console.log("Item update failed!");
+    //   }
+    // });
 
     //test Delete
-    this.provider.deleteItem(15)
-      .then(_ => {
-        console.log("Delete successful!");
-      })
-      .catch(err => {
-        console.log("Delete failed - " + err);
-      });
+    // this.provider.deleteItem(15)
+    //   .then(_ => {
+    //     console.log("Delete successful!");
+    //   })
+    //   .catch(err => {
+    //     console.log("Delete failed - " + err);
+    //   });
 
-    this.provider.getCategories().then(output => {
-      console.log(JSON.stringify(output));
-    });
+    // this.provider.getCategories().then(output => {
+    //   console.log(JSON.stringify(output));
+    // });
 
     this.provider.getItems()
       .then((courses: ICourse[]) => {
