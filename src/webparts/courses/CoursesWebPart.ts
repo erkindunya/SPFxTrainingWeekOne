@@ -257,10 +257,13 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
         $('a[id^="del"]', this.domElement).on('click', (event: JQuery.ClickEvent<HTMLElement>) => {
             event.preventDefault();
 
-            let itemID: number = parseInt($(event.currentTarget).attr("href"));
+            let params: string[] = $(event.currentTarget).attr("href").split(";");
+
+            let itemID: number = parseInt(params[0]);
+            let eTag: string = params[1];
 
             if (confirm("Delete this Course?")) {
-                this.provider.deleteItem(itemID, this.currentETag).then(success => {
+                this.provider.deleteItem(itemID, eTag).then(success => {
                     if (success) {
                         alert("Course Deleted!");
                         this.render();
@@ -289,6 +292,8 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
                 </tr>`;
 
         for (let c of courses) {
+            console.log("Item - " + JSON.stringify(c));
+
             html += `
         <tr class="${ styles.courserow}">
           <td>
@@ -302,7 +307,7 @@ export default class CoursesWebPart extends BaseClientSideWebPart<ICoursesWebPar
           <td>${ c.Price} </td>
           <td>${ c.Duration} </td>
           <td>
-            <a href="${ c["ID"]}" id="del">Del</a>
+            <a href="${ c["ID"]};${c["odata.etag"]}" id="del">Del</a>
           </td>
         </tr>
       `;

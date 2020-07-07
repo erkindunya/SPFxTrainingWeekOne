@@ -64,7 +64,7 @@ export class CourseProvider {
       ViewXml: query
     }).then((courses: ICourse[]) => {
       return courses[0] as ICourse;
-    })
+    });
   }
 
   public getItems(count: number = 100): Promise<ICourse[]> {
