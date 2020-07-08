@@ -35,12 +35,7 @@ export default class CoursePageApplicationCustomizer
   public onInit(): Promise<void> {
     Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
 
-    let message: string = this.properties.title + " : "
-      + this.properties.url;
-
-
     this.context.placeholderProvider.changedEvent.add(this, this.renderPlaceHolders);
-
 
     return Promise.resolve();
   }
@@ -53,9 +48,28 @@ export default class CoursePageApplicationCustomizer
     });
 
     if (!this.topPlaceHolder) {
+
+      // Try to Create the Top Place Holder
       this.topPlaceHolder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, {
         onDispose: this.onExtensionDispose
       } as IPlaceholderCreateContentOptions);
+
+      if (!this.topPlaceHolder) {
+        // Failed to create PlacerHolder
+        console.log("Failed to get Top PlaceHolder!");
+        return;
+      }
+
+      if (this.topPlaceHolder.domElement) {
+        let message: string = this.properties.title + " : "
+          + this.properties.url;
+
+        this.topPlaceHolder.domElement.innerHTML = `
+          <div>
+            <h2>${ message}</h2>
+          </div>
+        `;
+      }
     }
   }
 
