@@ -1,7 +1,10 @@
 import { override } from '@microsoft/decorators';
 import { Log } from '@microsoft/sp-core-library';
 import {
-  BaseApplicationCustomizer
+  BaseApplicationCustomizer,
+  PlaceholderContent,
+  PlaceholderName,
+  IPlaceholderCreateContentOptions
 } from '@microsoft/sp-application-base';
 import { Dialog } from '@microsoft/sp-dialog';
 
@@ -24,18 +27,39 @@ export interface ICoursePageApplicationCustomizerProperties {
 export default class CoursePageApplicationCustomizer
   extends BaseApplicationCustomizer<ICoursePageApplicationCustomizerProperties> {
 
+  private topPlaceHolder: PlaceholderContent;
+  private bottomPlaceHolder: PlaceholderContent;
+
+
   @override
   public onInit(): Promise<void> {
     Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
 
-    let message: string = this.properties.title + " : " + this.properties.url;
+    let message: string = this.properties.title + " : "
+      + this.properties.url;
 
-    if (!message) {
-      message = '(No properties were provided.)';
-    }
 
-    Dialog.alert(`Hello from ${strings.Title}:\n\n${message}`);
+    this.context.placeholderProvider.changedEvent.add(this, this.renderPlaceHolders);
+
 
     return Promise.resolve();
+  }
+
+  private renderPlaceHolders(): void {
+
+    console.log("Available Placeholders :");
+    this.context.placeholderProvider.placeholderNames.forEach((name) => {
+      console.log(name.toString());
+    });
+
+    if (!this.topPlaceHolder) {
+      this.topPlaceHolder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, {
+        onDispose: this.onExtensionDispose
+      } as IPlaceholderCreateContentOptions);
+    }
+  }
+
+  private onExtensionDispose(): void {
+    console.log("CoursePageApplicationCustomizer - onDispose Fired!");
   }
 }
