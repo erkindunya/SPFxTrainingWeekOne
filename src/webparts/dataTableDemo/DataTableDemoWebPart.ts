@@ -15,7 +15,7 @@ export interface IDataTableDemoWebPartProps {
 
 export default class DataTableDemoWebPart extends BaseClientSideWebPart<
     IDataTableDemoWebPartProps
-> {
+    > {
     public render(): void {
         this.domElement.innerHTML = `
       <div class="${styles.dataTableDemo}">
@@ -24,8 +24,8 @@ export default class DataTableDemoWebPart extends BaseClientSideWebPart<
         <div class="${styles.column}">
           <span class="${styles.title}">Welcome to SharePoint!</span>
   <p class="${
-      styles.subTitle
-  }">Customize SharePoint experiences using Web Parts.</p>
+            styles.subTitle
+            }">Customize SharePoint experiences using Web Parts.</p>
     <p class="${styles.description}">${escape(this.properties.description)}</p>
       <a href="https://aka.ms/spfx" class="${styles.button}">
         <span class="${styles.label}">Learn more</span>

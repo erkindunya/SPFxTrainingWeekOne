@@ -6,7 +6,21 @@
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
-    "isDomainIsolated": false
+    "isDomainIsolated": false,
+    "features": [
+      {
+        "title": "Application Extension - Deployment of custom action.",
+        "description": "Deploys a custom action with ClientSideComponentId association",
+        "id": "82bc63c0-2097-4fcb-959e-984a33133d9d",
+        "version": "1.0.0.0",
+        "assets": {
+          "elementManifests": [
+            "elements.xml",
+            "ClientSideInstance.xml"
+          ]
+        }
+      }
+    ]
   },
   "paths": {
     "zippedPackage": "solution/spfxbasics.sppkg"

@@ -9,7 +9,7 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import styles from './PnPDemoWebPart.module.scss';
 import * as strings from 'PnPDemoWebPartStrings';
 
-import { sp } from "@pnp/sp/presets/all";
+import { sp, IItemUpdateResult } from "@pnp/sp/presets/all";
 
 import { ICourse } from "../../common/ICourse";
 
@@ -45,52 +45,13 @@ export default class PnPDemoWebPart extends BaseClientSideWebPart<IPnPDemoWebPar
       </div>`;
 
     // Add Items
-    console.log("Adding new Item...");
+    console.log("Starting Batch Ops...");
 
-    /*this.provider.addItem({
-      CourseID: 8002,
-      Title: 'Entity Framework',
-      Description: 'Entity Framework with SQL Server',
-      Category: 'Web Development',
-      Duration: 40,
-      Price: 99.25,
-      Technology: 'Databases'
-    } as ICourse).then(item => {
-      console.log("Added item successfully!");
-      console.log(`Item ID: ${ item['ID'] } and ETag: ${ item["odata.etag"]}`);
-    }).catch(err=> {
-      console.log("Error adding item : " + err);
-    });*/
+    this.testBatchOps();
 
-    // console.log("Updating item...");
-    // this.provider.updateItem(7, {
-    //   CourseID: 1007,
-    //   Title: 'Swift Programming for iOS',
-    //   Description: 'Mobile App Dev with Swift',
-    //   Category: 'Mobile Development',
-    //   Technology: 'Swift',
-    //   Duration: 40,
-    //   Price: 200
-    // } as ICourse).then(flag => {
-    //   if (flag) {
-    //     console.log("Item Updated successfully!");
-    //   } else {
-    //     console.log("Item update failed!");
-    //   }
-    // });
-
-    //test Delete
-    // this.provider.deleteItem(15)
-    //   .then(_ => {
-    //     console.log("Delete successful!");
-    //   })
-    //   .catch(err => {
-    //     console.log("Delete failed - " + err);
-    //   });
-
-    // this.provider.getCategories().then(output => {
-    //   console.log(JSON.stringify(output));
-    // });
+    this.provider.getCategories().then(output => {
+      console.log(JSON.stringify(output));
+    });
 
     this.provider.getItems()
       .then((courses: ICourse[]) => {
@@ -112,6 +73,43 @@ export default class PnPDemoWebPart extends BaseClientSideWebPart<IPnPDemoWebPar
             Error getting Items: ${ err}
           </div>`;
       });
+  }
+
+  private testBatchOps() {
+    let batch = sp.createBatch();
+
+    sp.web.lists.getByTitle('Courses').items.getById(1).inBatch(batch).delete()
+      .then(_ => {
+        console.log("Batch: Delete Success!");
+      });
+
+    sp.web.lists.getByTitle('Courses').items.getById(6).inBatch(batch).update({
+      CourseID: 8002,
+      Title: 'Entity Framework',
+      Description: 'Entity Framework with SQL Server',
+      Category: 'Web Development',
+      Duration: 40,
+      Price: 99.25,
+      Technology: 'Databases'
+    } as ICourse).then((result: IItemUpdateResult) => {
+      console.log("Batch: Update success!");
+    });
+
+    sp.web.lists.getByTitle('Courses').items.inBatch(batch).add({
+      CourseID: 8005,
+      Title: 'Infragistics for Angular',
+      Description: 'Infragistics for Angular',
+      Category: 'Web Development',
+      Duration: 40,
+      Price: 199.00,
+    }).then((result) => {
+      console.log("Batch: Add Success!");
+    });
+
+    batch.execute().then(_ => {
+      console.log("Batch Operations completed!");
+    });
+
   }
 
   protected get dataVersion(): Version {

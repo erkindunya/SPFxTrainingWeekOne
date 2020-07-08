@@ -81,6 +81,14 @@
           "manifest": "./src/webparts/pnPDemo/PnPDemoWebPart.manifest.json"
         }
       ]
+    },
+    "course-page-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/coursePage/CoursePageApplicationCustomizer.js",
+          "manifest": "./src/extensions/coursePage/CoursePageApplicationCustomizer.manifest.json"
+        }
+      ]
     }
   },
   "externals": {
@@ -97,6 +105,7 @@
     "PropertyPaneDemoWebPartStrings": "lib/webparts/propertyPaneDemo/loc/{locale}.js",
     "CoursesWebPartStrings": "lib/webparts/courses/loc/{locale}.js",
     "SaasDemoWebPartStrings": "lib/webparts/saasDemo/loc/{locale}.js",
-    "PnPDemoWebPartStrings": "lib/webparts/pnPDemo/loc/{locale}.js"
+    "PnPDemoWebPartStrings": "lib/webparts/pnPDemo/loc/{locale}.js",
+    "CoursePageApplicationCustomizerStrings": "lib/extensions/coursePage/loc/{locale}.js"
   }
 }

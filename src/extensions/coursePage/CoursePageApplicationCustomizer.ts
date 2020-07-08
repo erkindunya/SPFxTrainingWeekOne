@@ -1,0 +1,41 @@
+import { override } from '@microsoft/decorators';
+import { Log } from '@microsoft/sp-core-library';
+import {
+  BaseApplicationCustomizer
+} from '@microsoft/sp-application-base';
+import { Dialog } from '@microsoft/sp-dialog';
+
+import * as strings from 'CoursePageApplicationCustomizerStrings';
+
+const LOG_SOURCE: string = 'CoursePageApplicationCustomizer';
+
+/**
+ * If your command set uses the ClientSideComponentProperties JSON input,
+ * it will be deserialized into the BaseExtension.properties object.
+ * You can define an interface to describe it.
+ */
+export interface ICoursePageApplicationCustomizerProperties {
+  // This is an example; replace with your own property
+  title: string;
+  url: string;
+}
+
+/** A Custom Action which can be run during execution of a Client Side Application */
+export default class CoursePageApplicationCustomizer
+  extends BaseApplicationCustomizer<ICoursePageApplicationCustomizerProperties> {
+
+  @override
+  public onInit(): Promise<void> {
+    Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
+
+    let message: string = this.properties.title + " : " + this.properties.url;
+
+    if (!message) {
+      message = '(No properties were provided.)';
+    }
+
+    Dialog.alert(`Hello from ${strings.Title}:\n\n${message}`);
+
+    return Promise.resolve();
+  }
+}

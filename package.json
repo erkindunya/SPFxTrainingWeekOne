@@ -32,7 +32,10 @@
     "datatables.net": "^1.10.21",
     "datatables.net-dt": "^1.10.21",
     "datatables.net-jqui": "^1.10.21",
-    "jquery": "^3.5.1"
+    "jquery": "^3.5.1",
+    "@microsoft/decorators": "1.10.0",
+    "@microsoft/sp-dialog": "1.10.0",
+    "@microsoft/sp-application-base": "1.10.0"
   },
   "devDependencies": {
     "@microsoft/rush-stack-compiler-3.3": "0.3.5",
