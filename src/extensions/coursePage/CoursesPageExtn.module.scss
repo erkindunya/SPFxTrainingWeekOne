@@ -1,0 +1,14 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.coursextn {
+  .topplc {
+    height: 50px;
+    background-color: darkgoldenrod;
+    color: white;
+    font-size: x-large;
+    font-weight: bold;
+  }
+  .bottomplc {
+    padding:10px;
+  }
+}

@@ -6,7 +6,8 @@ import {
   PlaceholderName,
   IPlaceholderCreateContentOptions
 } from '@microsoft/sp-application-base';
-import { Dialog } from '@microsoft/sp-dialog';
+
+import styles from "./CoursesPageExtn.module.scss";
 
 import * as strings from 'CoursePageApplicationCustomizerStrings';
 
@@ -65,8 +66,10 @@ export default class CoursePageApplicationCustomizer
           + this.properties.url;
 
         this.topPlaceHolder.domElement.innerHTML = `
-          <div>
-            <h2>${ message}</h2>
+          <div class="${ styles.coursextn}">
+            <div class="${ styles.topplc}">
+              <h2>${ message}</h2>
+            </div>
           </div>
         `;
       }
