@@ -7,6 +7,8 @@ import {
   IPlaceholderCreateContentOptions
 } from '@microsoft/sp-application-base';
 
+import * as $ from "jquery";
+
 import styles from "./CoursesPageExtn.module.scss";
 
 import * as strings from 'CoursePageApplicationCustomizerStrings';
@@ -68,11 +70,11 @@ export default class CoursePageApplicationCustomizer
         this.topPlaceHolder.domElement.innerHTML = `
           <div class="${ styles.coursextn}">
             <div class="${ styles.topplc}">
-              <div>
-                <img src="${ logoimg}" />&nbsp;
-                <a href="${ this.properties.url}">
-                  ${ this.properties.title}
-                </a>
+              <div class="${ styles.topnav} ">
+                <a class="active" href="#home">Home</a>
+                <a href="#news">News</a>
+                <a href="#contact">Contact</a>
+                <a href="#about">About</a>
               </div>
             </div>
           </div>
