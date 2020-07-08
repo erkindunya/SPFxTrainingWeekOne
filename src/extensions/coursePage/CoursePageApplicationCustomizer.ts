@@ -79,6 +79,31 @@ export default class CoursePageApplicationCustomizer
         `;
       }
     }
+
+    if (!this.bottomPlaceHolder) {
+
+      // Try to Create the Top Place Holder
+      this.bottomPlaceHolder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Bottom, {
+        onDispose: this.onExtensionDispose
+      } as IPlaceholderCreateContentOptions);
+
+      if (!this.bottomPlaceHolder) {
+        // Failed to create PlacerHolder
+        console.log("Failed to get Bottom PlaceHolder!");
+        return;
+      }
+
+      if (this.bottomPlaceHolder.domElement) {
+
+        this.bottomPlaceHolder.domElement.innerHTML = `
+          <div class="${ styles.coursextn}">
+            <div class="${ styles.bottomplc}">
+                &copy; 2020 - MindShareDev All Rights Reserved.d
+            </div>
+          </div>
+        `;
+      }
+    }
   }
 
   private onExtensionDispose(): void {
