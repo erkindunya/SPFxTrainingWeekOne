@@ -24,6 +24,8 @@ export interface ICoursePageApplicationCustomizerProperties {
   url: string;
 }
 
+const logoimg = require('./images/logo.png');
+
 /** A Custom Action which can be run during execution of a Client Side Application */
 export default class CoursePageApplicationCustomizer
   extends BaseApplicationCustomizer<ICoursePageApplicationCustomizerProperties> {
@@ -62,13 +64,16 @@ export default class CoursePageApplicationCustomizer
       }
 
       if (this.topPlaceHolder.domElement) {
-        let message: string = this.properties.title + " : "
-          + this.properties.url;
 
         this.topPlaceHolder.domElement.innerHTML = `
           <div class="${ styles.coursextn}">
             <div class="${ styles.topplc}">
-              <h2>${ message}</h2>
+              <div>
+                <img src="${ logoimg}" />&nbsp;
+                <a href="${ this.properties.url}">
+                  ${ this.properties.title}
+                </a>
+              </div>
             </div>
           </div>
         `;
