@@ -28,7 +28,7 @@
     "@types/jquery": "^3.5.0",
     "@types/jqueryui": "^1.12.13",
     "@types/webpack-env": "1.13.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "datatables.net": "^1.10.21",
     "datatables.net-dt": "^1.10.21",
     "datatables.net-jqui": "^1.10.21",
